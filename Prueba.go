@@ -7,7 +7,6 @@ type Producto struct {
 	Precio float64
 	Stock  int
 }
-
 func AgregarProducto(productos []Producto, p Producto) []Producto {
 	return append(productos, p)
 }
