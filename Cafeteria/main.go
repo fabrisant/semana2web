@@ -25,7 +25,7 @@ type Pedido struct {
 	Total      float64
 	Fecha      string
 }
-
+//funciones para clientes  
 func ListarClientes(clientes []Cliente) {
 	if len(clientes) == 0 {
 		fmt.Println("No hay clientes registrados")
@@ -33,26 +33,44 @@ func ListarClientes(clientes []Cliente) {
 	}
 
 	for _, c := range clientes {
-		fmt.Println("-------------")
-		fmt.Println("ID:", c.ID)
-		fmt.Println("Nombre:", c.Nombre)
-		fmt.Println("Carrera:", c.Carrera)
-		fmt.Println("Saldo:", c.Saldo)
+		fmt.Println("ID:", c.ID, "| Nombre:", c.Nombre, "| Carrera:", c.Carrera, "| Saldo:", c.Saldo)
 	}
+}
+func AgregarCliente(clientes []Cliente, c Cliente) []Cliente {
+	clientes = append(clientes, c)
+	return clientes
+}
+
+func BuscarCliente(clientes []Cliente, id int) *Cliente {
+	for i := range clientes {
+		if clientes[i].ID == id {
+			return &clientes[i]
+		}
+	}
+	return nil
+}
+
+func EliminarCliente(clientes []Cliente, id int) []Cliente {
+	for i := range clientes {
+		if clientes[i].ID == id {
+			clientes = append(clientes[:i], clientes[i+1:]...)
+			break
+		}
+	}
+	return clientes
 }
 
 func main() {
 	fmt.Println("==== Cafeteria LUIS ====")
 
-	// listas para clientes, productos y pedidos
 	clientes := []Cliente{}
 	productos := []Producto{}
 	pedidos := []Pedido{}
 
+	// 🔹 DATOS INICIALES
 	clientes = append(clientes, Cliente{1, "Valentina", "Medicina", 6.0})
 	clientes = append(clientes, Cliente{2, "Camila", "Arquitectura", 5.10})
 	clientes = append(clientes, Cliente{3, "Sofia", "Odontologia", 9.0})
-
 
 	productos = append(productos, Producto{1, "Gaseosa", 1.55, 6, "bebida"})
 	productos = append(productos, Producto{2, "Cafe", 1.0, 13, "bebida"})
@@ -60,34 +78,29 @@ func main() {
 	productos = append(productos, Producto{4, "Ensalada", 3.6, 9, "almuerzo"})
 	productos = append(productos, Producto{5, "Sopa", 2.5, 8, "almuerzo"})
 
-	// lista clientes registrados
+	// 🔹 LISTAR INICIAL
+	fmt.Println("\nClientes iniciales:")
 	ListarClientes(clientes)
-	fmt.Println("Cantidad de productos:", len(productos))
+
+	// 🔹 AGREGAR
+	clientes = AgregarCliente(clientes, Cliente{4, "Mario", "Software", 10.0})
+	fmt.Println("\nDespués de agregar cliente:")
+	ListarClientes(clientes)
+
+	// 🔹 BUSCAR
+	c := BuscarCliente(clientes, 3)
+	if c != nil {
+		fmt.Println("\nCliente encontrado:", c.Nombre)
+	} else {
+		fmt.Println("\nCliente no encontrado")
+	}
+
+	// 🔹 ELIMINAR
+	clientes = EliminarCliente(clientes, 1)
+	fmt.Println("\nDespués de eliminar cliente:")
+	ListarClientes(clientes)
+
+	// 🔹 EXTRA
+	fmt.Println("\nCantidad de productos:", len(productos))
 	fmt.Println("Cantidad de pedidos:", len(pedidos))
 }
-
-func AgregarCliente(clientes []Cliente, c Cliente) []Cliente {
-	clientes = append(clientes, c)
-	return clientes
-}
-func buscarCliente(clientes []Cliente, id int) (Cliente, bool) {
-	for _, c := range clientes {
-		if c.ID == id {
-			return c, true
-		}
-	}
-	return Cliente{}, false
-}
-func listarClientes(clientes []Cliente) {
-	if len(clientes) == 0 {
-		fmt.Println("No hay clientes registrados")
-		return		
-	}	
-	for _, c := range clientes {
-		fmt.Println("-------------")
-		fmt.Println("ID:", c.ID)					
-		fmt.Println("Nombre:", c.Nombre)
-		fmt.Println("Carrera:", c.Carrera)
-		fmt.Println("Saldo:", c.Saldo)
-	}
-}	
